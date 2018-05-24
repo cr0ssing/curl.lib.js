@@ -23,6 +23,7 @@ module.exports = {
         path: __dirname + "/dist",
         publicPath: "/dist",
         filename: process.env.NODE_ENV === "production" ? "[name].lib.min.js" : "[name].lib.js",
-        libraryTarget: 'umd',
+        library: 'curl.lib.js',
+        libraryTarget: 'umd'
     }
 }
