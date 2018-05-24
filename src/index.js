@@ -1,1 +1,1 @@
-window.curl = require('./curl.lib');
+window.curl = module.exports = require('./curl.lib');

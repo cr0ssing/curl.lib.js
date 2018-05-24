@@ -1,3 +1,5 @@
+**This is a fork of the official library to expose the curl object as a module not just as window.curl.**
+
 # curl.lib.js
 IOTA Proof-of-Work algorithm ported to Javascript to work in WebGL2-enabled browsers
 
