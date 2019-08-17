@@ -13,6 +13,7 @@
     "devDependencies": {
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",
+        "babel-plugin-transform-runtime": "^6.23.0",
         "babel-preset-env": "^1.6.0",
         "chai": "^4.1.2",
         "cross-env": "^5.1.6",
@@ -24,9 +25,9 @@
         "gulp-util": "^3.0.8",
         "loader-utils": "^1.1.0",
         "mocha": "^5.2.0",
-        "webpack": "^4.8.3",
-        "webpack-cli": "^2.1.4",
-        "webpack-dev-server": "^3.1.4",
+        "webpack": "^4.39.2",
+        "webpack-cli": "^3.3.6",
+        "webpack-dev-server": "^3.8.0",
         "webpack-stream": "^4.0.3"
     },
     "scripts": {

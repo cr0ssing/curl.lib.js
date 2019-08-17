@@ -2,6 +2,7 @@ const PearlDiver = require('./pearldiver');
 const Curl = require("./curl");
 const Const = require('./constants');
 const Converter = require('iota.crypto.js').converter;
+let transaction_converter_pow = require('@iota/transaction-converter');
 const NONCE_TIMESTAMP_LOWER_BOUND = 0;
 const NONCE_TIMESTAMP_UPPER_BOUND = Converter.fromValue(0xffffffffffffffff);
 const MAX_TIMESTAMP_VALUE = (Math.pow(3,27) - 1) / 2 
@@ -152,6 +153,44 @@ const overrideAttachToTangle = iota => {
   }
 }
 
+async function localPoW(trunkTransaction, branchTransaction, minWeightMagnitude, trytes) {
+  const finalTrytes = [];
+  curl.init();
+  let previousTransactionHash;
+  let zerotx = transaction_converter.asTransactionObject(trytes[0])
+  if(zerotx.currentIndex == 0 && zerotx.latestIndex != 0){
+    trytes.reverse()
+  }
+  for (let i = 0; i < trytes.length; i++) {
+      // Start with last index transaction
+      // Assign it the trunk / branch which the user has supplied
+      // If there is a bundle, chain the bundle transactions via
+      // trunkTransaction together
+      const tx = Object.assign({}, transaction_converter.asTransactionObject(trytes[i]));
+      tx.attachmentTimestamp = Date.now();
+      tx.attachmentTimestampLowerBound = 0;
+      tx.attachmentTimestampUpperBound = (Math.pow(3, 27) - 1) / 2;
+      // If this is the first transaction, to be processed
+      // Make sure that it's the last in the bundle and then
+      // assign it the supplied trunk and branch transactions
+      if (!previousTransactionHash) {
+          tx.trunkTransaction = trunkTransaction;
+          tx.branchTransaction = branchTransaction;
+      } else {
+          tx.trunkTransaction = previousTransactionHash;
+          tx.branchTransaction = trunkTransaction;
+      }
+      const newTrytes = transaction_converter.asTransactionTrytes(tx);
+      const nonce = await curl.pow({ trytes: newTrytes, minWeight: minWeightMagnitude });
+      const returnedTrytes = newTrytes.substr(0, newTrytes.length - nonce.length).concat(nonce);
+      // Calculate the hash of the new transaction with nonce and use that as the previous hash for next entry
+      const returnTransaction = transaction_converter.asTransactionObject(returnedTrytes);
+      previousTransactionHash = returnTransaction.hash;
+      finalTrytes.push(returnedTrytes);
+  }
+  return finalTrytes.reverse();
+}
+
 window.curl = module.exports = {
   init: () => { 
     pdInstance = PearlDiver.instance(); 
@@ -161,6 +200,7 @@ window.curl = module.exports = {
     return true;
   },
   pow,
+  localPoW,
   prepare: PearlDiver.prepare,
   setOffset: (o) => {pdInstance.offset = o},
   interrupt: () => interrupt(pdInstance),
