@@ -14,7 +14,13 @@ npm run build
 
 An example of the usage of curl.lib.js:
 
+```JS
+var iota = core.composeAPI({
+      provider: 'https://nodes.thetangle.org:443',
+      attachToTangle: curl.localPoW
+})
 ```
+```JS
 var curl = require('curl.lib.js');
 var minWeight = 18;
 curl.pow({trytes: myTryteString, minWeight})
