@@ -22,7 +22,9 @@ var iota = core.composeAPI({
 ```
 ```JS
 var curl = require('curl.lib.js');
-var minWeight = 18;
+var myTryteString = 'FOOBAR9TRYTES';
+var minWeight = 14;
+curl.init();
 curl.pow({trytes: myTryteString, minWeight})
     .then((nonce) =>{
         console.log(myTryteString.substr(0, 2187-81).concat(nonce));
@@ -39,6 +41,8 @@ curl.pow({trytes: myTryteString, minWeight})
 ```
 
 Available functions:
+* `init()`
+    * initializes the curl object. must be called before doing proof of work!
 * `pow({trytes, minWeight})` 
     * gets the proof-of-work on a transaction 
     * possible errors:
