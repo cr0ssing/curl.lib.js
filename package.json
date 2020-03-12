@@ -2,12 +2,13 @@
     "name": "curl.lib.js",
     "version": "1.0.22",
     "description": "WebGL2 Accelerated IOTA Proof of Work",
-    "main": "dist/curl.lib.js",
+    "main": "src/curl.lib.js",
     "directories": {
         "example": "example",
         "lib": "lib"
     },
     "dependencies": {
+        "@iota/transaction-converter": "^1.0.0-beta.23",
         "iota.crypto.js": "^0.4.2"
     },
     "devDependencies": {

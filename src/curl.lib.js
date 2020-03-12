@@ -191,7 +191,7 @@ async function localPoW(trunkTransaction, branchTransaction, minWeightMagnitude,
   return finalTrytes.reverse();
 }
 
-window.curl = module.exports = {
+module.exports = {
   init: () => { 
     pdInstance = PearlDiver.instance(); 
     if(pdInstance == null) {
